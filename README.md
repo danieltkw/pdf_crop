@@ -16,7 +16,8 @@ This Python script processes a specific PDF file by cropping odd pages after the
 
 ## Requirements
 - Python 3.x
-- PyPDF2 (`pip install pypdf2`)
+- PyPDF2 
+`pip install pypdf2`
 
 ---
 
@@ -25,4 +26,4 @@ This Python script processes a specific PDF file by cropping odd pages after the
 2. Modify the `folder_path` and `target_filename` variables to specify the folder path and filename of the PDF you want to process.
 3. Run the script:
    ```bash
-   python script_name.py
+   python pdf_crop.py
