@@ -1,29 +1,37 @@
 
 
-
 # PDF Cropper and Metadata Cleaner
 
-This Python script processes a specific PDF file by cropping odd pages after the fourth page and removing metadata for compliance. It is designed to search for a target PDF within a specified folder, process it, and save the cropped version with a new filename.
+This Python script processes a PDF file by cropping pages based on user input and removing metadata for compliance. It allows the user to dynamically set cropping preferences, including the starting page, whether to crop odd/even pages and the cropping percentage.
 
 ---
 
 ## Features
-- **PDF Search**: Locates a specific PDF file in a given folder.
-- **Page Cropping**: Crops odd-numbered pages after the fourth page by a percentage of the page width.
-- **Metadata Removal**: Clears all metadata from the processed PDF for compliance.
+
+- **Dynamic Folder and File Selection**:
+  - Specify a folder and PDF filename or let the script automatically detect a `.pdf` file in the script's folder.
+  - Handles missing files, invalid inputs, and non-existent folders.
+
+- **Cropping Options**:
+  - Start cropping from a specific page or the first page by default.
+  - Choose to crop odd pages, even pages, or both.
+  - Set the cropping percentage (e.g., 28%).
+
+- **Metadata Removal**:
+  - Strips metadata from the PDF for compliance.
 
 ---
 
 ## Requirements
-- Python 3.x
-- PyPDF2 
-`pip install pypdf2`
 
+- Python 3.x
+- PyPDF2
+- 
 ---
 
 ## How to Use
+
 1. Clone or download this repository.
-2. Modify the `folder_path` and `target_filename` variables to specify the folder path and filename of the PDF you want to process.
-3. Run the script:
+2. Install the required library:
    ```bash
-   python pdf_crop.py
+   pip install pypdf2
