@@ -21,7 +21,7 @@ def find_any_pdf(folder_path):
             return os.path.join(folder_path, file)
     return None
 
-def crop_pdf(input_pdf, output_pdf, crop_percentage, start_page, alter_odd, alter_even):
+def crop_pdf(input_pdf, output_pdf, crop_left, crop_top, crop_right, crop_bottom, start_page, alter_odd, alter_even):
     """Crop selected pages of a PDF based on user choices."""
     reader = PdfReader(input_pdf)
     writer = PdfWriter()
@@ -42,11 +42,18 @@ def crop_pdf(input_pdf, output_pdf, crop_percentage, start_page, alter_odd, alte
         if should_crop:
             media_box = page.mediabox
             page_width = float(media_box.width)
-            
+            page_height = float(media_box.height)
+
             # Define new crop box dimensions
-            crop_width = page_width * crop_percentage / 100
-            page.mediabox.lower_left = (crop_width, media_box.lower_left[1])
-            page.mediabox.lower_right = (media_box.lower_right[0], media_box.lower_right[1])
+            left = page_width * crop_left / 100
+            top = page_height * crop_top / 100
+            right = page_width * crop_right / 100
+            bottom = page_height * crop_bottom / 100
+
+            page.mediabox.lower_left = (left, bottom)
+            page.mediabox.lower_right = (media_box.lower_right[0] - right, bottom)
+            page.mediabox.upper_left = (left, media_box.upper_left[1] - top)
+            page.mediabox.upper_right = (media_box.upper_right[0] - right, media_box.upper_right[1] - top)
         
         # Add the (cropped or unchanged) page to the writer
         writer.add_page(page)
@@ -85,14 +92,25 @@ else:
 start_page_input = input("Enter the page to start cropping (e.g., 5, leave empty to start from the first page): ").strip()
 start_page = int(start_page_input) if start_page_input.isdigit() else 1
 
-alter_odd = input("Crop odd pages? (yes/no): ").strip().lower() == "yes"
-alter_even = input("Crop even pages? (yes/no): ").strip().lower() == "yes"
-crop_percentage = float(input("Enter crop percentage (e.g., 28): "))
+alter_odd = input("Crop odd pages? (yes/no, leave empty for none): ").strip().lower() == "yes"
+alter_even = input("Crop even pages? (yes/no, leave empty for none): ").strip().lower() == "yes"
+
+# Crop dimensions input
+crop_uniform = input("Do you want the same crop percentage for all sides? (yes/no): ").strip().lower() == "yes"
+if crop_uniform:
+    crop_percentage = float(input("Enter crop percentage for all sides (e.g., 28): "))
+    crop_left = crop_top = crop_right = crop_bottom = crop_percentage
+else:
+    crop_left = float(input("Enter crop percentage for the left side (e.g., 28, leave empty for 0): ").strip() or 0)
+    crop_top = float(input("Enter crop percentage for the top side (e.g., 10, leave empty for 0): ").strip() or 0)
+    crop_right = float(input("Enter crop percentage for the right side (e.g., 15, leave empty for 0): ").strip() or 0)
+    crop_bottom = float(input("Enter crop percentage for the bottom side (e.g., 5, leave empty for 0): ").strip() or 0)
 
 output_pdf = os.path.join(folder_path, f"cropped_{os.path.basename(input_pdf)}")
-crop_pdf(input_pdf, output_pdf, crop_percentage, start_page, alter_odd, alter_even)
+crop_pdf(input_pdf, output_pdf, crop_left, crop_top, crop_right, crop_bottom, start_page, alter_odd, alter_even)
 print(f"Processed and saved as {output_pdf}")
 # ------------------------------------------------------------
+
 
 
 
