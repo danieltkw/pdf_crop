@@ -26,7 +26,7 @@ This Python script processes a PDF file by cropping pages based on user input an
 
 - Python 3.x
 - PyPDF2
-- 
+  
 ---
 
 ## How to Use
